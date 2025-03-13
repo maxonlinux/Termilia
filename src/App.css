@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --text-xxs: 10px;
+  --height-titlebar: 27px;
+  --padding-titlebar: 27px;
+}
+
+html,
+body {
+  @apply size-full overflow-hidden transition-colors;
+}
+
+body {
+  @apply bg-black/30 text-white border border-white/10 rounded-xl;
+}
+
+#root {
+  @apply size-full select-none;
+}
+
+.input {
+  @apply bg-black/30 rounded-md text-white px-2 py-1 w-full;
+}
+
+::-webkit-outer-spin-button,
+::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.xterm-screen {
+  @apply mx-auto;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
