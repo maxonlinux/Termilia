@@ -2,12 +2,13 @@ import "./App.css";
 import Term from "./components/Term";
 import Tabs from "./components/Tabs";
 import { useTabStore } from "./stores/useTabStore";
-import { useContextMenu } from "./hooks/useContextMenu";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Titlebar from "./components/Titlebar";
 import { loadSettings } from "./stores/useSettingsStore";
 import Settings from "./components/Settings";
+import useContextMenu from "./hooks/useContextMenu";
+import useDisableDefaultContextMenu from "./hooks/useDisableDefaultContextMenu";
 
 async function handleResize() {
   const isFullscreen = await getCurrentWindow().isMaximized();
@@ -19,7 +20,11 @@ function App() {
   const { tabs, addTab } = useTabStore();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  useContextMenu({
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useDisableDefaultContextMenu();
+
+  useContextMenu(ref, {
     items: [
       {
         id: "ctx_new_tab",
@@ -62,7 +67,7 @@ function App() {
           <Settings setIsOpen={setSettingsOpen} />
         </aside>
         <main className="flex flex-col size-full overflow-auto">
-          <div className="relative flex flex-1 px-1.5">
+          <div ref={ref} className="relative flex flex-1 px-1.5">
             {tabs.length > 0 ? (
               <div className="overflow-hidden size-full py-2 bg-black/30 border border-white/10 rounded-xl">
                 <div className="relative h-full">

@@ -27,7 +27,7 @@ export const useTabStore = create<TabStore>((set) => ({
     set((state) => {
       const newId = Date.now();
       return {
-        tabs: [...state.tabs, { id: newId, title: `${newId}` }],
+        tabs: [...state.tabs, { id: newId, title: `New Tab` }],
         activeTab: newId,
       };
     }),
@@ -35,22 +35,27 @@ export const useTabStore = create<TabStore>((set) => ({
   removeTab: (id: number) =>
     set((state) => {
       const filteredTabs = state.tabs.filter((x) => x.id !== id);
-      const isActiveRemoved = id === state.activeTab;
+
+      const chooseTab = () => {
+        // If no tabs remain
+        if (filteredTabs.length === 0) {
+          return -1;
+        }
+
+        // If removed tab is active (selected)
+        if (id === state.activeTab) {
+          const removedTabIndex = state.tabs.findIndex((tab) => tab.id === id);
+          const newIndex = Math.max(removedTabIndex - 1, 0); // Select previous tab or first tab
+
+          return filteredTabs[newIndex].id;
+        }
+
+        return state.activeTab;
+      };
 
       return {
         tabs: filteredTabs,
-        activeTab:
-          filteredTabs.length === 0
-            ? -1 // if no tabs remain
-            : isActiveRemoved
-            ? (() => {
-                const removedTabIndex = state.tabs.findIndex(
-                  (tab) => tab.id === id
-                );
-                const newIndex = Math.max(removedTabIndex - 1, 0); // Select previous tab or first tab
-                return filteredTabs[newIndex].id;
-              })()
-            : state.activeTab,
+        activeTab: chooseTab(),
       };
     }),
 

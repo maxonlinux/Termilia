@@ -1,32 +1,28 @@
-import { useEffect } from "react";
 import { Menu, MenuOptions } from "@tauri-apps/api/menu";
-// import { listen } from "@tauri-apps/api/event";
+import { useEffect } from "react";
 
-export function useContextMenu(options: MenuOptions) {
-  const menuPromise = Menu.new({ items: options.items });
-
-  async function showContextMenu(event: MouseEvent) {
-    event.preventDefault();
-    const menu = await menuPromise;
-    menu.popup();
-  }
-
+export default function useContextMenu(
+  ref: React.RefObject<HTMLElement>,
+  options: MenuOptions
+) {
   useEffect(() => {
-    document.addEventListener("contextmenu", showContextMenu);
+    if (!ref.current) return;
 
-    // const unlistenPromise = listen<string>("menu-event", (event) => {
-    //   const menuItem = menuItems.find((x) => x.id === event.payload);
+    const menuPromise = Menu.new({ items: options.items });
 
-    //   if (menuItem && menuItem.onClick) {
-    //     menuItem.onClick();
-    //   }
-    // });
+    async function showContextMenu(event: MouseEvent) {
+      event.preventDefault();
+      const menu = await menuPromise;
+      menu.popup();
+    }
+
+    const element = ref.current;
+    element.addEventListener("contextmenu", showContextMenu);
 
     return () => {
-      document.removeEventListener("contextmenu", showContextMenu);
-      //   unlistenPromise.then((unlisten) => unlisten());
+      element.removeEventListener("contextmenu", showContextMenu);
     };
-  }, []);
+  }, [ref, options]);
 
   return null;
 }
