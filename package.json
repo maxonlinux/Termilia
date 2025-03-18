@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "mac-build": "tauri build --target aarch64-apple-darwin",
+    "win-arm-build": "tauri build --runner cargo-xwin --target aarch64-pc-windows-msvc",
     "preview": "vite preview",
     "tauri": "tauri"
   },

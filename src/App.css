@@ -4,6 +4,7 @@
   --text-xxs: 10px;
   --height-titlebar: 27px;
   --padding-titlebar: 27px;
+  --radius-window: 10px;
 }
 
 html,
@@ -12,7 +13,7 @@ body {
 }
 
 body {
-  @apply bg-black/30 text-white border border-white/10 rounded-xl;
+  @apply bg-black/30 text-white border border-white/10 rounded-window;
 }
 
 #root {
